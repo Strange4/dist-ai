@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="page.css">
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+
+        <script src="js/game/setup.js" defer></script>
+        <script src="js/game/util.js" defer></script>
+        <script src="js/game/objects.js" defer></script>
+        <script src="js/ai.js" defer></script>
+        <script src="js/game/renderer.js"></script>
+        <script src="js/ws/ws.js"></script>
+        <script src="js/game/main.js" defer></script>
+        <script src="js/ui.js" defer></script>
+    </head>
+    <body>
+        <div id="main">
+            <canvas id="canvas" ></canvas>
+            <div id="dashboard"></div>
+        </div>
+        <div id="ui">
+            <ul id="quick-info-list" class="next-gen-listener">
+                <li id="generation-display" class="next-gen-listener">Current generation: </li>
+                <li id="entity-count" class="game-loop-listener">Entity count: </li>
+                <li id="goal-progression" class="next-gen-listener">Last gen goal progression: </li>
+            </ul>
+        </div>
+    </body>
+</html>
