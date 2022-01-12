@@ -21,9 +21,3 @@ app.get('/', (request, response)=>{
 server.listen(3000, ()=>{
     console.log('server started on port 3000');
 });
-
-type NetworkUpdateInfo = {
-    workers: number,
-    observers: number,
-    clientUpdated: string
-}

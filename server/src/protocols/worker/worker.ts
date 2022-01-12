@@ -1,7 +1,7 @@
 import ProtocolHandler from "../ProtocolHandler";
 import WebSocket from "ws";
 
-export default class WorkerHandler extends ProtocolHandler {
+export default class WorkerHandler implements ProtocolHandler {
     private serverBirds: BirdData[] = [];
     private readonly MAX_BIRDS = 500;
 
