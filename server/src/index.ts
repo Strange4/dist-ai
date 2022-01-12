@@ -2,9 +2,6 @@ import express from 'express';
 import http from 'http';
 import WebSocket from 'ws';
 import ConnectionHandler from './connectionHandler';
-import Observer from './protocols/observer/observer';
-import ProtocolHandler from './protocols/ProtocolHandler';
-import Worker from './protocols/worker/worker';
 
 const connnectionHandler = new ConnectionHandler();
 const app = express();
@@ -14,7 +11,7 @@ const wss = new WebSocket.Server({server: server});
 wss.on('connection', (ws)=>{
     connnectionHandler.newConnection(ws);
     ws.ping('what id doo');
-    ws.on('pong', (data)=>{console.log('received ping: '+data.toString()); ws.pong(data)});
+    ws.on('pong', (data)=>{console.log('received pong: '+data.toString())});
 });
 
 app.get('/', (request, response)=>{

@@ -1,7 +1,7 @@
 import { v4 as uuidv4, validate as validateUUID } from 'uuid';
 import { WebSocket } from 'ws';
 import Observer from './protocols/observer/observer';
-import Worker from './protocols/worker/worker';
+import WorkerHandler from './protocols/worker/worker';
 import ProtocolHandler from './protocols/ProtocolHandler';
 
 export default class ConnectionHandler {
@@ -9,7 +9,7 @@ export default class ConnectionHandler {
     private readonly clientProtocols = new Map<ClientId, ProtocolHandler>();
     private readonly protocols = new Map<string, ProtocolHandler>();
     constructor(){
-        this.protocols.set('worker', new Worker());
+        this.protocols.set('worker', new WorkerHandler());
         this.protocols.set('observer', new Observer());
     }
 
