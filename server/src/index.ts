@@ -14,7 +14,7 @@ const wss = new WebSocket.Server({server: server});
 wss.on('connection', (ws)=>{
     connnectionHandler.newConnection(ws);
     ws.ping('what id doo');
-    ws.on('pong', (data)=>{console.log('received ping: '+data.toString())})
+    ws.on('pong', (data)=>{console.log('received ping: '+data.toString()); ws.pong(data)});
 });
 
 app.get('/', (request, response)=>{
