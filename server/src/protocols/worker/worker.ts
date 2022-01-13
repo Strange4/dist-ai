@@ -5,32 +5,35 @@ export default class WorkerHandler implements ProtocolHandler {
     private serverBirds: BirdData[] = [];
     private readonly MAX_BIRDS = 500;
 
-    onMessage(websocket: WebSocket, messageData: string): void {
+    /**
+     * 
+     * @param websocket the websocket of the client who sent the message
+     * @param messageData the message data that was sent by the client
+     * @returns 
+     */
+    onMessage(websocket: WebSocket, messageData: string): { replyAllMessage?: string, messageSent?: boolean } {
+        if(messageData.length == 0) {
+            console.log('the message sent was empty');
+            websocket.close(4001, 'Bad data');
+            return {};
+        }
         let receivedBirds: BirdData[];
         try{
             receivedBirds = JSON.parse(messageData);
         } catch(error){
             console.log('Failed to parse the birds', error);
             websocket.close(4001, 'Bad data');
-            return;
+            return {};
         }
         receivedBirds.splice(this.MAX_BIRDS);
         this.serverBirds.push(...receivedBirds);
         WorkerHandler.calculateFitness(this.serverBirds);
         this.serverBirds = WorkerHandler.pickBestBirds(this.serverBirds);
-        websocket.send(JSON.stringify(WorkerHandler.pickFirst(this.serverBirds, receivedBirds.length)));
-    }
-
-    private static pickFirst(birds: BirdData[], amount: number){
-        const returnedBirds:BirdData[] = [];
-        for(let i=0;i<birds.length && amount;i++){
-            returnedBirds.push(birds[i]);
-        }
-        return returnedBirds;
+        return { replyAllMessage: JSON.stringify(this.serverBirds) }
     }
 
     onClose(websocket: WebSocket, code: number, reason: string): void {
-        throw new Error("Method not implemented.");
+        console.log('a bird worker has fallen');
     }
 
     private static calculateFitness(birds: BirdData[]){
