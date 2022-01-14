@@ -70,6 +70,7 @@ export default class ConnectionHandler {
         this.notifyObservers();
         console.log('new client connected')
         ws.on('message', (message)=>{
+            console.time('messageHandling');
             this.networkInfo.lastClientMessage = clientId;
             this.notifyObservers();
             const replyAllInfo = protocolHandler.onMessage(ws, message.toString());
@@ -81,6 +82,8 @@ export default class ConnectionHandler {
             }
             this.replyAll(protocolHandler, replyAllInfo.replyAllMessage);
             this.cleanClosedConnnections();
+            console.timeEnd('messageHandling');
+
         });
         ws.on('close', (code, reason)=>{
             console.log(`client disconected, code: ${code}, reason: ${reason}`);

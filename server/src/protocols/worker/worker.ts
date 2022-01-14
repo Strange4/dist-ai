@@ -3,7 +3,7 @@ import WebSocket from "ws";
 
 export default class WorkerHandler implements ProtocolHandler {
     private serverBirds: BirdData[] = [];
-    private readonly MAX_BIRDS = 500;
+    private readonly MAX_BIRDS = 300;
 
     /**
      * 
@@ -33,11 +33,13 @@ export default class WorkerHandler implements ProtocolHandler {
         receivedBirds.splice(this.MAX_BIRDS);
         this.serverBirds.push(...receivedBirds);
         WorkerHandler.calculateFitness(this.serverBirds);
+        this.serverBirds = WorkerHandler.pickBestBirds(this.serverBirds);
+        this.serverBirds.splice(this.MAX_BIRDS)
         WorkerHandler.pickBestBirds(this.serverBirds).splice(this.MAX_BIRDS);
         websocket.send(JSON.stringify(this.serverBirds.slice(0, receivedBirds.length)));
         return {}
     }
-
+    
     onClose(websocket: WebSocket, code: number, reason: string): void {
         console.log(`a bird worker had fallen, code: ${code}, reason: ${reason}`);
     }
