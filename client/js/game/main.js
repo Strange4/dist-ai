@@ -17,7 +17,6 @@ Game.nextGeneration = function (global){
     sendBirds(socket, birds);
     disposeBirds(birds);
     const serverBirds = getServerBirds();
-    // const serverBirds = undefined;
     if(!serverBirds || serverBirds.length == 0){
         global.birds = nextGen;
     } else {
