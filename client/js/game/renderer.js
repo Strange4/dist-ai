@@ -1,6 +1,5 @@
 const Game = {};
 
-
 /**
  * stopes the main game loop
  */

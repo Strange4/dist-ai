@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Testing with Jasmine</title>
+    
+    <!-- Tests scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script src="../js/game/setup.js" defer></script>
+    <script src="../js/game/util.js" defer></script>
+    <script src="../js/game/objects.js" defer></script>
+    <script src="../js/ai.js" defer></script>
+    <script src="../js/game/renderer.js" defer></script>
+    <script src="../js/ws/ws.js" defer></script>
+    <script src="../js/game/main.js" defer></script>
+    <script src="../js/ui.js" defer></script>
+    
+    <!-- Tests lib and scripts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/jasmine.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/jasmine.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/jasmine-html.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/boot.min.js"></script>
+    <script src="./ai.test.js"></script>
+    <script src="./objects.test.js"></script>
+</head>
+<body>
+    <div id="main">
+        <canvas id="canvas" ></canvas>
+        <div id="dashboard"></div>
+    </div>
+    <div id="ui">
+        <ul id="quick-info-list" class="next-gen-listener">
+            <li id="generation-display" class="next-gen-listener">Current generation: </li>
+            <li id="entity-count" class="game-loop-listener">Entity count: </li>
+            <li id="goal-progression" class="next-gen-listener">Last gen goal progression: </li>
+        </ul>
+    </div>
+</body>
+</html>
