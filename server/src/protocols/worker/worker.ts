@@ -3,7 +3,7 @@ import WebSocket from "ws";
 
 export default class WorkerHandler implements ProtocolHandler {
     private serverBirds: BirdData[] = [];
-    private readonly MAX_BIRDS = 200;
+    private readonly MAX_BIRDS = 300;
 
     /**
      * 
