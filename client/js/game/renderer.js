@@ -15,10 +15,12 @@ const Game = {};
  Game.run = function(global){
     try{
         if(Game.goal(global)){
-            Game.over(global);
             Game.update(global);
+            Game.nextGeneration(global);
             dispatchGenerationEvent(global);
+            Game.over(global);
             Game.stop();
+            endConnection(socket, 4999, 'game finished');
         } else {
             Game.update(global);
             Game.draw(global);

@@ -5,7 +5,7 @@ class Pipe {
     constructor(){
         const GAP = height/3;
         const MIN_BORDER = height/1000;
-        const SPEED = width/30;
+        const SPEED = width/20;
         const rand = random(MIN_BORDER, height - MIN_BORDER - GAP);
 
         this.top_end = rand;
@@ -57,7 +57,7 @@ class Bird{
         this.yPos = height/2;
         this.xPos = width/10;
         this.birdRadius = height / 25;
-        this.gravity = height/20;
+        this.gravity = height/40;
         this.velocity = 0;
         this.lift = -(height/20);
         this.score = 0;

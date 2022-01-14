@@ -4,32 +4,50 @@
  */
 Game.nextGeneration = function (global){
     const birds = global.birds;
+    const nextGen = [];
+    const birdsToSend = [];
     calculateFitness(birds);
     for(let i=0;i<birds.length;i++){
         const survivorBird = pickBird(birds);
+        survivorBird.mutate();
         const nextGenBird = new Bird(survivorBird.brain);
-        nextGenBird.mutate();
-        birds[i] = nextGenBird;
+        birdsToSend[i] = survivorBird;
+        nextGen[i] = nextGenBird;
     }
     sendBirds(socket, birds);
+    disposeBirds(birds);
     const serverBirds = getServerBirds();
-    global.birds = serverBirds != undefined && serverBirds.length != 0 ? serverBirds : birds;
+    // const serverBirds = undefined;
+    if(!serverBirds || serverBirds.length == 0){
+        global.birds = nextGen;
+    } else {
+        global.birds = serverBirds;
+    }
     global.generation++;
-    global.pipes = [ new Pipe()];;
+    global.pipes = [ new Pipe()];
     const ctx = global.ctx;
     ctx.fillStyle = 'black';
     ctx.fillRect(0,0,canvasWidth,canvasHeight);
     dispatchGenerationEvent(global);
-    Game.stop();
 }
 
+/**
+ * gets the server birds that are stored in server data
+ * @returns {Bird[] | undefined}
+ */
 function getServerBirds(){
     if(serverData.lastChecked < serverData.lastUpdated){
         serverData.lastChecked = new Date().getTime();
-        return serverData.birds;
+        const serverBirds = serverData.birds;
+        serverData.birds = [];
+        return serverBirds;
     }
 }
 
+/**
+ * dispatches a next-gent event to all listeners in the dom
+ * @param {Object} global the global variables
+ */
 function dispatchGenerationEvent(global){
     const event = new CustomEvent('next-gen', {detail: global});
     const elements = document.querySelectorAll('.next-gen-listener');
@@ -154,7 +172,13 @@ Game.draw = function(global) {
     const ctx = canvas.getContext('2d');
     let pipes = [new Pipe()];
     let generation = 1;
-    const birds = createBirds(200);
+    let birds;
+    const serverBirds = getServerBirds();
+    if(!serverBirds || serverBirds.length == 0){
+        birds = createBirds(200);
+    } else {
+        birds = serverBirds;
+    }
     const global = {
         ctx: ctx,
         pipes: pipes,
