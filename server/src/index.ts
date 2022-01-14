@@ -10,8 +10,6 @@ const wss = new WebSocket.Server({server: server});
 
 wss.on('connection', (ws)=>{
     connnectionHandler.newConnection(ws);
-    ws.ping('what id doo');
-    ws.on('pong', (data)=>{console.log('received pong: '+data.toString())});
 });
 
 app.get('/', (request, response)=>{

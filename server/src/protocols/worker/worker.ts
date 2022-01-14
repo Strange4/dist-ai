@@ -17,6 +17,11 @@ export default class WorkerHandler implements ProtocolHandler {
             websocket.close(4001, 'Bad data');
             return {};
         }
+        if(messageData.startsWith('getBirds')){
+            const ammount = Number(messageData.split(' ')[1]);
+            websocket.send(JSON.stringify(this.serverBirds.slice(0, ammount)));
+            return {};
+        }
         let receivedBirds: BirdData[];
         try{
             receivedBirds = JSON.parse(messageData);
@@ -28,12 +33,13 @@ export default class WorkerHandler implements ProtocolHandler {
         receivedBirds.splice(this.MAX_BIRDS);
         this.serverBirds.push(...receivedBirds);
         WorkerHandler.calculateFitness(this.serverBirds);
-        this.serverBirds = WorkerHandler.pickBestBirds(this.serverBirds);
-        return { replyAllMessage: JSON.stringify(this.serverBirds) }
+        WorkerHandler.pickBestBirds(this.serverBirds).splice(this.MAX_BIRDS);
+        websocket.send(JSON.stringify(this.serverBirds.slice(0, receivedBirds.length)));
+        return {}
     }
 
     onClose(websocket: WebSocket, code: number, reason: string): void {
-        console.log('a bird worker has fallen');
+        console.log(`a bird worker had fallen, code: ${code}, reason: ${reason}`);
     }
 
     private static calculateFitness(birds: BirdData[]){

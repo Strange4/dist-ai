@@ -34,6 +34,8 @@ export default class ConnectionHandler {
         if(!protocolHandler){
             ws.send("There is no protocol matching your protocol request");
             ws.close(4000, 'Protocol not found');
+            console.log(`disconnected client, code: ${4000}, reason: Protocol not found`)
+            this.cleanClosedConnnections();
             return;
         }
         this.setNewWorker(ws, protocolHandler);
@@ -50,6 +52,7 @@ export default class ConnectionHandler {
                 this.clients.get(clientId)?.send(message);
                 this.networkInfo.lastServerMessage = clientId;
                 this.notifyObservers();
+                console.log('just sent a message');
             }
         }
     }
@@ -65,6 +68,7 @@ export default class ConnectionHandler {
         this.workers.set(clientId, protocolHandler);
         this.networkInfo.workers.push(clientId);
         this.notifyObservers();
+        console.log('new client connected')
         ws.on('message', (message)=>{
             this.networkInfo.lastClientMessage = clientId;
             this.notifyObservers();
@@ -76,10 +80,12 @@ export default class ConnectionHandler {
                 return;
             }
             this.replyAll(protocolHandler, replyAllInfo.replyAllMessage);
+            this.cleanClosedConnnections();
         });
         ws.on('close', (code, reason)=>{
+            console.log(`client disconected, code: ${code}, reason: ${reason}`);
             protocolHandler.onClose(ws, code, reason.toString('utf-8'));
-            this.connectionClosed(code, reason.toString('utf-8'));
+            this.cleanClosedConnnections();
             this.notifyObservers();
         });
     }
@@ -119,17 +125,19 @@ export default class ConnectionHandler {
 
     /**
      * cleans the networking of the closing websockets (workers and observers)
-     * @param code the closing code of the websocket
-     * @param reason the reason message of the closing websocket
      */
-    private connectionClosed(code: number, reason: string){
-        console.log(`client disconected, code: ${code}, reason: ${reason}`);
+    private cleanClosedConnnections(){
+        const oldSize = this.clients.size;
         for(const [clientId, ws] of this.clients.entries()){
-            if(ws.readyState == WebSocket.CLOSED || WebSocket.CLOSING){
+            if(ws.readyState === WebSocket.CLOSED || ws.readyState === WebSocket.CLOSING){
+                console.log('cleaning closed connnection', clientId);
                 this.clients.delete(clientId);
                 this.workers.delete(clientId);
                 this.removeObserver(clientId);
             }
+        }
+        if(oldSize !== this.clients.size){
+            console.log(this.clients.size);
         }
     }
     
