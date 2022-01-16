@@ -6,7 +6,7 @@ export default class WorkerHandler implements ProtocolHandler {
     private readonly MAX_BIRDS = 300;
 
     /**
-     * 
+     * handles the message of a worker
      * @param websocket the websocket of the client who sent the message
      * @param messageData the message data that was sent by the client
      * @returns 
@@ -31,11 +31,9 @@ export default class WorkerHandler implements ProtocolHandler {
             return {};
         }
         receivedBirds.splice(this.MAX_BIRDS);
-        this.serverBirds.push(...receivedBirds);
-        WorkerHandler.calculateFitness(this.serverBirds);
+        this.serverBirds = this.serverBirds.concat(receivedBirds);
         this.serverBirds = WorkerHandler.pickBestBirds(this.serverBirds);
-        this.serverBirds.splice(this.MAX_BIRDS)
-        WorkerHandler.pickBestBirds(this.serverBirds).splice(this.MAX_BIRDS);
+        this.serverBirds.splice(this.MAX_BIRDS);
         websocket.send(JSON.stringify(this.serverBirds.slice(0, receivedBirds.length)));
         return {}
     }
@@ -45,25 +43,26 @@ export default class WorkerHandler implements ProtocolHandler {
     }
 
     private static calculateFitness(birds: BirdData[]){
-        let sum = 0;
+        const { score } = birds.reduce((accumulated, current)=>{ return {...accumulated, score:accumulated.score + current.score}});
+        let fitnessSum = 0;
         for(const bird of birds){
-            sum += bird.score;
-        }
-        for(const bird of birds){
-            bird.fitness = bird.score / sum;
+            bird.fitness = bird.score / score;
+            fitnessSum += bird.fitness;
         }
     }
     
     private static pickBestBirds(birds: BirdData[]){
+        WorkerHandler.calculateFitness(birds);
+        birds.sort((a, b)=>{return a.fitness - b.fitness});
         const bestBirds:BirdData[] = [];
-        for(let i=0;i<birds.length && i<birds.length;i++){
-            bestBirds[i] = WorkerHandler.pickBird(birds);
+        for(let i=0;i<birds.length;i++){
+            const goodBird = WorkerHandler.pickBird(birds);
+            bestBirds[i] = goodBird;
         }
         return bestBirds;
     }
 
     private static pickBird(birds: BirdData[]){
-        birds.sort((a, b)=>{return a.fitness - b.fitness});
         const random = Math.random();
         let cumulativeSum = 0;
         for(let i=0;i<birds.length;i++){

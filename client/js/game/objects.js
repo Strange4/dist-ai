@@ -5,7 +5,7 @@ class Pipe {
     constructor(){
         const GAP = height/3;
         const MIN_BORDER = height/1000;
-        const SPEED = width/20;
+        const SPEED = width/30;
         const rand = random(MIN_BORDER, height - MIN_BORDER - GAP);
 
         this.top_end = rand;

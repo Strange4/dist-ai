@@ -9,7 +9,7 @@ function setConnection(){
         updateLocalBirds(event);
         console.timeEnd('updateNewBirds');
     });
-    socket.addEventListener('close', (event)=>{console.log('the connection with the server has been closed'); console.log(event)})
+    socket.addEventListener('close', (event)=>{console.log(`Connection with the server closed, code: ${event.code}, reason: ${event.reason}`);})
     return socket;
 }
 
@@ -46,12 +46,16 @@ async function updateLocalBirds(dataReceived){
  * @param {WebSocket} socket the socket connection to the server
  * @param {Bird[]} birds the birds to send
  */
-async function sendBirds(socket, birds){
+function sendBirds(socket, birds){
     const jsonData = [];
     for(const bird of birds){
         jsonData.push(bird.toJson());
     }
-    socket.send(JSON.stringify(jsonData, null, 4));
+    if(socket.CLOSED || socket.CLOSING){
+        console.log('disconected from the server will continute offline');
+    } else {
+        socket.send(JSON.stringify(jsonData, null, 4));
+    }
 }
 
 /**
@@ -61,14 +65,11 @@ async function sendBirds(socket, birds){
 async function getBirdsFromData(data){
     const birds = [];
     for(const bird of data){
-        const inputNodes = bird.neuralNetwork.inputNodes;
-        const hiddenNodes = bird.neuralNetwork.hiddenNodes;
-        const outputNodes = bird.neuralNetwork.outputNodes;
-        const hiddenActivation = bird.neuralNetwork.hiddenActivation;
-        const outputActivation = bird.neuralNetwork.outputActivation;
-        const weights = bird.neuralNetwork.weights;
+        const { inputNodes, hiddenNodes, outputNodes, hiddenActivation, outputActivation, weights } = bird.neuralNetwork;
         const nn = NeuralNetwork.fromJson(inputNodes, hiddenNodes, outputNodes, hiddenActivation, outputActivation, weights);
-        birds.push(new Bird(nn));
+        const receivedBird = new Bird(nn);
+        receivedBird.mutate();
+        birds.push(receivedBird);
         nn.dispose();
     }
     return birds;

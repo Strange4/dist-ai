@@ -4,30 +4,30 @@
  */
 Game.nextGeneration = function (global){
     const birds = global.birds;
-    const nextGen = [];
-    const birdsToSend = [];
-    calculateFitness(birds);
-    for(let i=0;i<birds.length;i++){
-        const survivorBird = pickBird(birds);
-        survivorBird.mutate();
-        const nextGenBird = new Bird(survivorBird.brain);
-        birdsToSend[i] = survivorBird;
-        nextGen[i] = nextGenBird;
-    }
     sendBirds(socket, birds);
-    disposeBirds(birds);
     const serverBirds = getServerBirds();
+    // if the birds are not yet back from the server, use these ones
     if(!serverBirds || serverBirds.length == 0){
+        const nextGen = [];
+        calculateFitness(birds);
+        for(let i=0;i<birds.length;i++){
+            const survivorBird = pickBird(birds);
+            survivorBird.mutate();
+            const nextGenBird = new Bird(survivorBird.brain);
+            nextGen.push(nextGenBird);
+        }
         global.birds = nextGen;
     } else {
         global.birds = serverBirds;
     }
+    disposeBirds(birds);
     global.generation++;
-    global.pipes = [ new Pipe()];
+    dispatchGenerationEvent(global);
+    global.pipesPassed = 0;
+    global.pipes = [new Pipe()];
     const ctx = global.ctx;
     ctx.fillStyle = 'black';
     ctx.fillRect(0,0,canvasWidth,canvasHeight);
-    dispatchGenerationEvent(global);
 }
 
 /**
@@ -60,7 +60,6 @@ function dispatchGenerationEvent(global){
  * @param {Bird[]} birds the array of birds to pick from
  */
 function pickBird(birds){
-    birds.sort((a, b)=>{return a.fitness - b.fitness});
     const random = Math.random();
     let cumulativeSum = 0;
     for(let i=0;i<birds.length;i++){
@@ -84,7 +83,7 @@ function calculateFitness(birds){
     for(const bird of birds){
         bird.fitness = bird.score / scoreSum;
     }
-    
+    birds.sort((a, b)=>{return a.fitness - b.fitness});
 }
 
 /**
@@ -250,5 +249,3 @@ Game.over = function (global){
     ctx.font = `${50}px Arial`
     ctx.fillText('GAME OVER', canvasWidth / 2, canvasHeight / 2);
 }
-
-// start();

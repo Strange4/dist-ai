@@ -34,7 +34,7 @@ export default class ConnectionHandler {
         if(!protocolHandler){
             ws.send("There is no protocol matching your protocol request");
             ws.close(4000, 'Protocol not found');
-            console.log(`disconnected client, code: ${4000}, reason: Protocol not found`)
+            console.log(`disconnected client, code: ${4000}, reason: Protocol not found`);
             this.cleanClosedConnnections();
             return;
         }
@@ -52,9 +52,9 @@ export default class ConnectionHandler {
                 this.clients.get(clientId)?.send(message);
                 this.networkInfo.lastServerMessage = clientId;
                 this.notifyObservers();
-                console.log('just sent a message');
             }
         }
+        console.log(`Sent a message to all ${protocolHandler.constructor.name}`);
     }
 
     /**
@@ -86,7 +86,6 @@ export default class ConnectionHandler {
 
         });
         ws.on('close', (code, reason)=>{
-            console.log(`client disconected, code: ${code}, reason: ${reason}`);
             protocolHandler.onClose(ws, code, reason.toString('utf-8'));
             this.cleanClosedConnnections();
             this.notifyObservers();
@@ -140,7 +139,7 @@ export default class ConnectionHandler {
             }
         }
         if(oldSize !== this.clients.size){
-            console.log(this.clients.size);
+            console.log(`Connections left: ${this.clients.size}`);
         }
     }
     

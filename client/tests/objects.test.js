@@ -18,17 +18,27 @@ describe('testing sending birds', ()=>{
 
     it('should have the same prediction', async ()=>{
         const bird = new Bird();
+        bird.mutate();
         sendBirds(socket, [bird]);
         await delay(1000);
         const serverBird = getServerBirds()[0];
-        expect(serverBird.yPos).toEqual(bird.yPos);
-        const pipe = new Pipe();
-        bird.think(pipe);
-        serverBird.think(pipe);
-        serverBird.update();
-        bird.update();
-        expect(serverBird.yPos).toEqual(bird.yPos);
 
+        const localPrediction = bird.brain.predict([1,2,3,4,5]);
+        const serverPrediction = serverBird.brain.predict([1,2,3,4,5]);
+        expect(localPrediction).toEqual(serverPrediction);
+    });
+
+    it('shoud get back the best birds', async ()=>{
+        const totalSent = 200;
+        const myBirds = [];
+        for(let i=0;i<totalSent;i++){
+            const bird = new Bird();
+            bird.score = i;
+            myBirds[i] = bird;
+        }
+        sendBirds(socket, myBirds);
+        await delay(1000);
+        const serverBirds = getServerBirds();
     });
 });
 
