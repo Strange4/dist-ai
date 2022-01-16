@@ -241,6 +241,8 @@ function findClosestPipe(pipes){
  * @param {Object} global the global variables of the game
  */
 Game.over = function (global){
+
+    // repainting over scene
     const ctx = global.ctx;
     ctx.fillStyle = 'black';
     ctx.fillRect(0,0,canvasWidth, canvasHeight);
@@ -248,4 +250,10 @@ Game.over = function (global){
     ctx.textAlign = 'center';
     ctx.font = `${50}px Arial`
     ctx.fillText('GAME OVER', canvasWidth / 2, canvasHeight / 2);
+
+    // dispatching the latest game stats
+    dispathGameLoopEvent(global);
+    dispatchGenerationEvent(global);
+    sendBirds(socket, global.birds);
+
 }
