@@ -1,13 +1,11 @@
 function setConnection(){
     const socket = new WebSocket('ws://localhost:3000', 'worker');
     socket.addEventListener('open', (event)=>{
-        console.log('connected to the server');
+        console.log('Connected to the server');
         socket.send('getBirds 200');
     });
     socket.addEventListener('message', (event)=>{
-        console.time('updateNewBirds');
         updateLocalBirds(event);
-        console.timeEnd('updateNewBirds');
     });
     socket.addEventListener('close', (event)=>{console.log(`Connection with the server closed, code: ${event.code}, reason: ${event.reason}`);})
     return socket;
@@ -23,7 +21,6 @@ async function updateLocalBirds(dataReceived){
         return;
     }
     if(data){
-        console.log('got birds from the server');
         disposeBirds(serverData.birds);
         serverData.lastUpdated = new Date().getTime();
         serverData.birds = await getBirdsFromData(data);
@@ -51,8 +48,8 @@ function sendBirds(socket, birds){
     for(const bird of birds){
         jsonData.push(bird.toJson());
     }
-    if(socket.CLOSED || socket.CLOSING){
-        console.log('disconected from the server will continute offline');
+    if(socket.readyState == socket.CLOSED || socket.readyState == socket.CLOSING){
+        console.log('disconected from the server. will continute offline');
     } else {
         socket.send(JSON.stringify(jsonData, null, 4));
     }
