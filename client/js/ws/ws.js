@@ -17,7 +17,6 @@ async function updateLocalBirds(dataReceived){
         data = JSON.parse(dataReceived.data);
     } catch (error){
         console.log(dataReceived.data);
-        console.log(error);
         return;
     }
     if(data){

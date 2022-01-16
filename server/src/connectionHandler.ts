@@ -78,6 +78,7 @@ export default class ConnectionHandler {
                 this.networkInfo.lastServerMessage = clientId;
                 this.notifyObservers();
                 this.replyAll(protocolHandler, replyAllInfo.replyAllMessage, ws);
+                console.timeEnd('messageHandling');
                 return;
             }
             this.replyAll(protocolHandler, replyAllInfo.replyAllMessage);

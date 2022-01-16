@@ -20,7 +20,7 @@ export default class WorkerHandler implements ProtocolHandler {
         if(messageData.startsWith('getBirds')){
             const ammount = Number(messageData.split(' ')[1]);
             websocket.send(JSON.stringify(this.serverBirds.slice(0, ammount)));
-            return {};
+            return { messageSent: true };
         }
         let receivedBirds: BirdData[];
         try{
@@ -35,7 +35,7 @@ export default class WorkerHandler implements ProtocolHandler {
         this.serverBirds = WorkerHandler.pickBestBirds(this.serverBirds);
         this.serverBirds.splice(this.MAX_BIRDS);
         websocket.send(JSON.stringify(this.serverBirds.slice(0, receivedBirds.length)));
-        return {}
+        return { messageSent: true}
     }
     
     onClose(websocket: WebSocket, code: number, reason: string): void {

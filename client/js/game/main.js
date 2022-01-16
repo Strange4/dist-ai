@@ -101,9 +101,6 @@ Game.update = function(global){
             global.pipesPassed++;
         }
     }
-    for(const pipe of pipes){
-        pipe.speed += pipe.speed / 100;
-    }
 
     const closestPipe = findClosestPipe(pipes);
     for(const bird of birds){
