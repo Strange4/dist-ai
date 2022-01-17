@@ -154,7 +154,7 @@ class Bird{
      * mutates the brain of the current bird
      */
     mutate(){
-        this.brain.mutate(0.01);
+        this.brain.mutate(0.1);
     }
 
     /**
