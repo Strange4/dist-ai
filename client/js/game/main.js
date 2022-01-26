@@ -26,7 +26,7 @@ Game.nextGeneration = function (global){
     global.pipesPassed = 0;
     global.pipes = [new Pipe()];
     const ctx = global.ctx;
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'white';
     ctx.fillRect(0,0,canvasWidth,canvasHeight);
 }
 
@@ -142,7 +142,7 @@ Game.draw = function(global) {
         const ctx = global.ctx;
         const pipes = global.pipes;
         const birds = global.birds;
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = 'white';
         ctx.fillRect(0,0, canvasWidth, canvasHeight);
         for(const pipe of pipes){
             pipe.show(ctx)
@@ -241,7 +241,7 @@ Game.over = function (global){
 
     // repainting over scene
     const ctx = global.ctx;
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'white';
     ctx.fillRect(0,0,canvasWidth, canvasHeight);
     ctx.fillStyle = 'orange'
     ctx.textAlign = 'center';

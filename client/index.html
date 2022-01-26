@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="page.css">
+        <link rel="stylesheet" href="css/page.css">
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
-
         <script src="js/game/setup.js" defer></script>
         <script src="js/game/util.js" defer></script>
         <script src="js/game/objects.js" defer></script>
@@ -12,19 +11,36 @@
         <script src="js/ws/ws.js" defer></script>
         <script src="js/game/main.js" defer></script>
         <script src="js/ui.js" defer></script>
+        <title>dist-ai</title>
     </head>
     <body>
-        <div id="main">
-            <canvas id="canvas" ></canvas>
-            <div id="dashboard"></div>
+        <div id="header">
+            <div id="logo">
+                <div id="svg"></div>
+                <div id="title">dist-ai</div>
+            </div>
         </div>
-        <div id="ui">
-            <ul id="quick-info-list" class="next-gen-listener">
-                <li id="generation-display" class="next-gen-listener">Current generation: </li>
-                <li id="entity-count" class="game-loop-listener">Entity count: </li>
-                <li id="goal-progression" class="next-gen-listener">Last gen goal progression: </li>
-            </ul>
-            <button onclick="start()">start</button>
+        <div id="main">
+            <div id="canvas-div">
+                <canvas id="canvas" ></canvas>
+            </div>
+            <div id="ui">
+                <div id="quick-info-list">
+                    <div>
+                        Current generation
+                        <div id="generation-display" class="next-gen-listener">1</div>
+                    </div>
+                    <div >
+                        Entity count
+                        <div id="entity-count" class="game-loop-listener">0</div>
+                    </div>
+                    <div>
+                        Last gen goal progression
+                        <div id="goal-progression" class="next-gen-listener">0%</div>
+                    </div>
+                </div>
+                <button id="start-btn" onclick="start()">start</button>
+            </div>
         </div>
     </body>
 </html>

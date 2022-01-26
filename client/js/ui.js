@@ -1,6 +1,6 @@
 const generationDisplay = document.getElementById('generation-display');
 generationDisplay.addEventListener('next-gen', (e)=>{
-    generationDisplay.innerText = `Current generation: ${e.detail.generation}`;
+    generationDisplay.innerText = `${e.detail.generation}`;
 });
 
 const entityCount = document.getElementById('entity-count');
@@ -12,10 +12,10 @@ entityCount.addEventListener('game-loop', (e)=>{
             entitySum++;
         }
     }
-    entityCount.innerText = `Entity count: ${entitySum}`;
+    entityCount.innerText = `${entitySum}`;
 });
 
 const goalProgression = document.getElementById('goal-progression');
 goalProgression.addEventListener('next-gen', (e)=>{
-    goalProgression.innerText = `Last gen goal progression: ${Math.round((e.detail.pipesPassed / e.detail.goal) * 100) }%`;
-})
+    goalProgression.innerText = `${Math.round((e.detail.pipesPassed / e.detail.goal) * 100) }%`;
+});

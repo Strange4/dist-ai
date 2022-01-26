@@ -20,7 +20,7 @@ class Pipe {
      * @param {CanvasRenderingContext2D} ctx the 2d canvas context to the pipe onto
      */
     show(ctx){
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = '#858585';
         const relativeX = (this.xPos * canvasWidth) / width;
         const relativeTop = (this.top_end * canvasHeight) / height;
         const relativeBottom = (this.bottom_end * canvasHeight) / height;
@@ -59,7 +59,7 @@ class Bird{
         this.birdRadius = height / 25;
         this.gravity = height/40;
         this.velocity = 0;
-        this.lift = -(height/20);
+        this.lift = -(height/10);
         this.score = 0;
         this.fitness = 0;
         this.isDead = false;
@@ -88,7 +88,7 @@ class Bird{
         const relativeRadius = (this.birdRadius * canvasHeight) / height;
         ctx.beginPath();
         ctx.arc(relativeX, relativeY, relativeRadius, 0,  Math.PI * 2);
-        ctx.fillStyle = 'rgba(235, 64, 52,0.4)';
+        ctx.fillStyle = 'rgba(0, 43, 153, 0.25)';
         ctx.fill();
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'white'
@@ -154,7 +154,7 @@ class Bird{
      * mutates the brain of the current bird
      */
     mutate(){
-        this.brain.mutate(0.1);
+        this.brain.mutate(0.05);
     }
 
     /**
