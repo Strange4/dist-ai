@@ -2,6 +2,8 @@ html{
     scroll-behavior: smooth;
 }
 body{
+    width: 100%;
+    height: 100%;
     border: none;
     margin: 0;
     padding: 0;
@@ -34,10 +36,13 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 100%;
+    width: 20%;
 
 }
 #quick-info-list{
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -45,10 +50,10 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-
+    height: 100%;
+    min-height: 4rem;
 
     margin: 10% 0;
-    height: 5rem;
     padding: 2% 5%;
     background-color: white;
     border-radius: 0.5rem;
@@ -62,13 +67,26 @@ body{
 }
 
 #start-btn{
-    position: absolute;
+    position: fixed;
     bottom: 7%;
-    right: 5%;
+    right: 4%;
+
     border-radius: 50rem;
     border: none;
     background-color: orange;
     padding: 1%;
     box-shadow: rgb(0 0 0 / 12%) 0rem 0.3125rem 0.625rem;    color: white;
+    /* width: 50px; */
+    /* height: 50ox; */
+    
+    /* center the stuff */
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#start-btn svg{
+    width: 25px;
+    height: 25px;
 }
 

@@ -1,0 +1,25 @@
+header{
+    height: 10%;
+    max-height: 10rem;
+    min-height: 2rem;
+    background-color: #24292e;
+    display: flex;
+    align-items: center;
+    color:white;
+    padding: 1rem 1.1rem;
+}
+#logo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#logo div{
+    display: inline-block;
+    font-weight: 700;
+    font-size: larger;
+}
+
+#svg svg{
+    width: 2rem;
+    margin-right: 0.5rem;
+}
