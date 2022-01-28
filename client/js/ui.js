@@ -19,3 +19,8 @@ const goalProgression = document.getElementById('goal-progression');
 goalProgression.addEventListener('next-gen', (e)=>{
     goalProgression.innerText = `${Math.round((e.detail.pipesPassed / e.detail.goal) * 100) }%`;
 });
+
+const conAlert = document.getElementById('con-alert');
+conAlert.addEventListener('disconnected', ()=>{
+    conAlert.style.opacity = '1';
+});

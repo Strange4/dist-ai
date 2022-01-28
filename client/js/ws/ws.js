@@ -1,5 +1,9 @@
+let connected = false;
 function setConnection(){
     const socket = new WebSocket('ws://localhost:3000', 'worker');
+    socket.addEventListener('error', (event)=>{
+        dispatchDisconnectedEvent();
+    });
     socket.addEventListener('open', (event)=>{
         console.log('Connected to the server');
         socket.send('getBirds 200');
@@ -47,10 +51,14 @@ function sendBirds(socket, birds){
     for(const bird of birds){
         jsonData.push(bird.toJson());
     }
-    if(socket.readyState == socket.CLOSED || socket.readyState == socket.CLOSING){
-        console.log('disconected from the server. will continute offline');
-    } else {
-        socket.send(JSON.stringify(jsonData, null, 4));
+    if(connected){
+        if(socket.readyState == socket.CLOSED || socket.readyState == socket.CLOSING){
+            console.log('disconected from the server. will continute offline');
+            connected = false;
+            dispatchDisconnectedEvent();
+        } else {
+            socket.send(JSON.stringify(jsonData, null, 4));
+        }
     }
 }
 
@@ -86,4 +94,12 @@ const socket = setConnection();
  */
 function endConnection(socket, code, reason){
     socket.close(code, reason);
+}
+
+function dispatchDisconnectedEvent(){
+    const event = new CustomEvent('disconnected');
+    const elements = document.querySelectorAll('.disconnected-listener');
+    for(const element of elements){
+        element.dispatchEvent(event);
+    }
 }

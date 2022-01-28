@@ -1,12 +1,13 @@
 header{
     height: 10%;
-    max-height: 10rem;
+    max-height: 4rem;
     min-height: 2rem;
-    background-color: #24292e;
+    /* background-color: #24292e; */
     display: flex;
     align-items: center;
-    color:white;
+    color:#24292e;
     padding: 1rem 1.1rem;
+    /* box-shadow: rgba(140, 152, 164, 0.356) 0px 3px 6px 0px; */
 }
 #logo{
     display: flex;
@@ -22,4 +23,33 @@ header{
 #svg svg{
     width: 2rem;
     margin-right: 0.5rem;
+}
+
+#con-alert{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    top: 2rem;
+    right: 4rem;
+    border-radius: 0.75rem;
+    /* background-color: rgba(255, 255, 255, 0.418); */
+    box-shadow:  rgb(0 0 0 / 5%) 0rem 1.25rem 1.6875rem 0rem;
+    /* box-shadow: rgb(255 255 255 / 90%) 0rem 0rem 0.0625rem 0.0625rem inset; */
+    backdrop-filter: saturate(200%) blur(1.875rem);
+    min-height: 4.5rem;
+    padding: 1%;
+    opacity: 0;
+    transition: all linear 50ms;
+}
+
+#con-alert .message{
+    color: rgb(52, 71, 103);
+    font-weight: 600;
+}
+
+#con-alert .submessage{
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
 }
