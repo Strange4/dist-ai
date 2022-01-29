@@ -3,10 +3,11 @@ function setConnection(){
     const socket = new WebSocket('ws://localhost:3000', 'worker');
     socket.addEventListener('error', (event)=>{
         dispatchDisconnectedEvent();
+        connected = false;
     });
     socket.addEventListener('open', (event)=>{
-        console.log('Connected to the server');
         socket.send('getBirds 200');
+        connected = true;
     });
     socket.addEventListener('message', (event)=>{
         updateLocalBirds(event);
