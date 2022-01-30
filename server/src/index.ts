@@ -9,6 +9,10 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({server: server});
 
+server.listen(3000, ()=>{
+    console.log('server started on port 3000');
+});
+
 app.use('/', express.static(path.join(__dirname + '/../public')))
 
 wss.on('connection', (ws)=>{
@@ -16,10 +20,6 @@ wss.on('connection', (ws)=>{
 });
 
 app.get('/', (request, response, next)=>{
-    response.sendFile('index.html', {root: __dirname + '/../public'});
+    response.redirect('/home');
     next();
-});
-
-server.listen(3000, ()=>{
-    console.log('server started on port 3000');
-});
+})

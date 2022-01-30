@@ -103,6 +103,11 @@ export default class ConnectionHandler {
         this.networkInfo.observers.push(clientId);
         this.clients.set(clientId, ws);
         this.notifyObservers();
+        ws.on('close', (code, reason)=>{
+            console.log(`an observer disconnected. code: ${code}, reason: ${reason}`);
+            this.cleanClosedConnnections();
+            this.notifyObservers();
+        });
         return;
     }
 
