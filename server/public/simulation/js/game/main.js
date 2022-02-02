@@ -186,7 +186,12 @@ Game.draw = function(global) {
         Game.run(global);
         return global;
     } else {
-        Game._intervalId = setInterval(Game.run, 1000/100, global);
+        let anim = () =>{
+            Game.run(global);
+            requestAnimationFrame(anim);
+        }
+        anim();
+        // Game._intervalId = setInterval(Game.run, 1000/100, global);
     }
 }
 
