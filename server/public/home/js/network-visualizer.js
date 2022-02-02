@@ -1,13 +1,3 @@
-function visualizeData(data){
-    d3.select('#network-visualizer')
-    .data(data)
-    .enter()
-    .append('p')
-    .text(data=>data)
-    .exit()
-    .remove();
-}
-
 const graphData = {
     nodes: [
         {id: 'computer'},
@@ -34,49 +24,65 @@ svg.attr('width', width).attr('height', height);
 const simulation = d3
     .forceSimulation(graphData.nodes)
     .force('link', d3.forceLink(graphData.links).distance(50).id((dataPoint)=>{return dataPoint.id}))
-    .force('charge', d3.forceManyBody())
+    .force('charge', d3.forceManyBody().strength(-100))
     .force('center', d3.forceCenter(width/2, height/2))
+    .force('x', d3.forceX())
+    .force('y', d3.forceY())
+    .alphaTarget(1)
     .on('tick', tick)
 
-const link = svg
-    .append('g').attr('class', 'link')
-    .selectAll('line')
-    .data(graphData.links)
-    .enter()
-    .append('line');
+const group = svg.append('g');
 
-const node = svg
-    .append('g').attr('class', 'node')
-    .selectAll('circle')
-    .data(graphData.nodes)
-    .enter()
-    .append('circle')
-    .attr('r', 10)
+let link = group
+    .append('g')
+    .selectAll('.line');
+
+let node = group
+    .append('g')
+    .selectAll('.node');
+
+// updateGraph(graphData);
+
+/**
+ * updates the graph
+ * @param {Object} graphData the graph data that is needed to update the graph
+ */
+function updateGraph(graphData){
+    node = node.data(graphData.nodes, function(d) {return d.source});
+    node.exit().remove();
+    node = node.enter().append("circle").attr('class', 'node').attr("fill", function(d) { return 'blue' }).attr("r", 8)
     .call(d3.drag()
-        .on('start', dragstarted)
-        .on('drag', dragged)
-        .on('end', dragended));
+    .on('start', dragstarted)
+    .on('drag', dragged)
+    .on('end', dragended)).merge(node);
 
-// adding mouse over events
-const hiddenDiv = d3.select('body').append('div').attr('class', 'hover-data-div').style('opacity', 0);
-node.on('mouseover', function (event, datum) {
-    d3.select(this).transition()
-    .duration('50')
-    .attr('opacity', '.5');
-    hiddenDiv.transition().duration(50).style('opacity', '1');
-    hiddenDiv.text(datum.id).style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 15) + 'px');
-    console.log(event)
-    console.log(datum);
-})
+    console.log(graphData.links)
+    link = link.data(graphData.links, function(d) { return d.source.id + "-" + d.target.id; });
+    // link = link.data(graphData.links, function(d) {return d.source});
+    link.exit().remove();
+    link = link.enter().append('line').attr('class', 'link').merge(link);
+
+    // adding mouse over events
+    const hiddenDiv = d3.select('body').append('div').attr('class', 'hover-data-div').style('opacity', 0);
+    node.on('mouseover', function (event, datum) {
+        d3.select(this).transition()
+        .duration('50')
+        .attr('opacity', '.5');
+        hiddenDiv.transition().duration(50).style('opacity', '1');
+        hiddenDiv.text(datum.id).style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 15) + 'px');
+    })
     .on('mouseout', function (event, datum) {
-    d3.select(this).transition()
-    .duration('50')
-    .attr('opacity', '1');
-
-    hiddenDiv.transition().duration(50).style('opacity', 0)
-});
-
-
+        d3.select(this).transition()
+        .duration('50')
+        .attr('opacity', '1');
+        
+        hiddenDiv.transition().duration(50).style('opacity', 0)
+    });
+    simulation.nodes(graphData.nodes);
+    simulation.force('link').links(graphData.links);
+    simulation.alpha(1).restart();
+    
+}
 function tick(e){
     node.attr('cx', d=>{return d.x})
         .attr('cy', d=> { return d.y });
