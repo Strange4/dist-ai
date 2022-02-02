@@ -55,6 +55,19 @@ function dispatchDisconnectedEvent(){
  */
 function parseNetworkData(data){
     const parsed = JSON.parse(data);
-    console.log(parsed);
-    // visualizeData(parsed.observers);
+    const nodes = [{id: 'server'}];
+    parsed.workers.forEach(node=>{nodes.push({id: node, type: 'worker'})});
+    parsed.observers.forEach(node=>{nodes.push({id: node, type: 'observer'})});
+    const links = [];
+    nodes.forEach(node=>{links.push({source: node.id, target: 'server'})});
+    
+
+    console.log(nodes, links);
+
+    const graphData = {
+        nodes: nodes,
+        links: links
+    }
+    console.log(graphData);
+    ng.updateGraph(graphData);
 }

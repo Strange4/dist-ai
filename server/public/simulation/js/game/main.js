@@ -191,7 +191,6 @@ Game.draw = function(global) {
             requestAnimationFrame(anim);
         }
         anim();
-        // Game._intervalId = setInterval(Game.run, 1000/100, global);
     }
 }
 
