@@ -55,13 +55,9 @@ function parseNetworkData(data){
     const links = [];
     nodes.forEach(node=>{links.push({source: node.id, target: 'server'})});
     
-
-    console.log(nodes, links);
-
     const graphData = {
         nodes: nodes,
         links: links
     }
-    console.log(graphData);
     ng.updateGraph(graphData);
 }
