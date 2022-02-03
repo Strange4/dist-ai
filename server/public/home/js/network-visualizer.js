@@ -1,18 +1,10 @@
-const graphData = {
-    nodes: [
-        {id: 'computer'},
-        {id: 'me'},
-        {id: 'you'}
-    ],
-    links: [
-        {source: 'computer', target: 'me'}
-    ]
-}
 class NetworkGraph{
     #simulation;
     #link;
     #node;
+    #color;
     constructor(){
+        this.#color = d3.scaleOrdinal(d3.schemeCategory10);
         const bbox = d3.select('#network-visualizer').node().getBoundingClientRect();
         const width = bbox.width;
         const height =  bbox.height;
@@ -41,7 +33,7 @@ class NetworkGraph{
     updateGraph = (graphData) =>{
         this.#node = this.#node.data(graphData.nodes, function(d) {return d.source});
         this.#node.exit().remove();
-        this.#node = this.#node.enter().append("circle").attr('class', 'node').attr("fill", function(d) { return 'blue' }).attr("r", 8)
+        this.#node = this.#node.enter().append("circle").attr('class', 'node').attr("fill", (d) => { return this.#color(d.type) }).attr("r", 8)
         .call(d3.drag()
         .on('start', this.#dragstarted)
         .on('drag', this.#dragged)
@@ -58,7 +50,7 @@ class NetworkGraph{
             .duration('50')
             .attr('opacity', '.5');
             hiddenDiv.transition().duration(50).style('opacity', '1');
-            hiddenDiv.text(datum.id).style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 15) + 'px');
+            hiddenDiv.text(datum.type).style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 15) + 'px');
         })
         .on('mouseout', function (event, datum) {
             d3.select(this).transition()

@@ -1,12 +1,10 @@
 .node{
-    fill: blue;
-    stroke: #fff;
     stroke-width: 5px;
 }
 
 .link{
-    stroke: red;
-    stroke-width: 5px;
+    stroke: black;
+    stroke-width: 3px;
 }
 
 div.hover-data-div {

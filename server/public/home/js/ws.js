@@ -1,10 +1,4 @@
 const socket = setConnection();
-let networkData = {
-    lastClientMessage: "",
-    lastServerMessage: "",
-    observers: [],
-    workers: []
-};
 /**
  * sets the observer connection with the server
  * @returns {WebSocket}
@@ -55,7 +49,7 @@ function dispatchDisconnectedEvent(){
  */
 function parseNetworkData(data){
     const parsed = JSON.parse(data);
-    const nodes = [{id: 'server'}];
+    const nodes = [{id: 'server', type: 'server'}];
     parsed.workers.forEach(node=>{nodes.push({id: node, type: 'worker'})});
     parsed.observers.forEach(node=>{nodes.push({id: node, type: 'observer'})});
     const links = [];
