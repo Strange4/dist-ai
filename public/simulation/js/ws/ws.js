@@ -52,7 +52,7 @@ function sendBirds(socket, birds){
     for(const bird of birds){
         jsonData.push(bird.toJson());
     }
-    if(connected){
+    if(connected){ 
         if(socket.readyState == socket.CLOSED || socket.readyState == socket.CLOSING){
             console.log('disconected from the server. will continute offline');
             connected = false;

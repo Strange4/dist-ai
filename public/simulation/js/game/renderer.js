@@ -4,7 +4,7 @@ const Game = {};
  * stopes the main game loop
  */
  Game.stop = function(){
-    clearInterval(Game._intervalId);
+    clearInterval(Game._stopID);
 }
 
 /**
@@ -16,7 +16,6 @@ const Game = {};
         if(Game.goal(global)){
             Game.over(global);
             Game.stop();
-            endConnection(socket, 4999, 'game finished');
         } else {
             Game.update(global);
             Game.draw(global);

@@ -9,7 +9,6 @@ function setConnection(){
         dispatchDisconnectedEvent();
     });
     socket.addEventListener('open', (event)=>{
-        console.log('connected with the server');
     });
     socket.addEventListener('message', (event)=>{
         parseNetworkData(event.data);

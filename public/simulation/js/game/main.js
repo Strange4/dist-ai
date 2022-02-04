@@ -186,11 +186,7 @@ Game.draw = function(global) {
         Game.run(global);
         return global;
     } else {
-        let anim = () =>{
-            Game.run(global);
-            requestAnimationFrame(anim);
-        }
-        anim();
+        Game._stopID = setInterval(Game.run, 0, global);
     }
 }
 
@@ -256,5 +252,5 @@ Game.over = function (global){
     dispathGameLoopEvent(global);
     dispatchGenerationEvent(global);
     sendBirds(socket, global.birds);
-
+    endConnection(socket, 4999, 'game finished');
 }

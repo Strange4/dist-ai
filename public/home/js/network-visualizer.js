@@ -29,6 +29,13 @@ class NetworkGraph{
         .append('g')
         .selectAll('.node');
     }
+
+    updateCenter = () =>{
+        const bbox = d3.select('#network-visualizer').node().getBoundingClientRect();
+        const width = bbox.width;
+        const height =  bbox.height;
+        this.#simulation.force('center', d3.forceCenter(width/2, height/2));
+    }
     
     updateGraph = (graphData) =>{
         this.#node = this.#node.data(graphData.nodes, function(d) {return d.source});
@@ -42,7 +49,6 @@ class NetworkGraph{
         this.#link = this.#link.data(graphData.links, function(d) { return d.source.id + "-" + d.target.id; });
         this.#link.exit().remove();
         this.#link = this.#link.enter().append('line').attr('class', 'link').merge(this.#link);
-        
         // adding mouse over events
         const hiddenDiv = d3.select('body').append('div').attr('class', 'hover-data-div').style('opacity', 0);
         this.#node.on('mouseover', function (event, datum) {
@@ -92,4 +98,3 @@ class NetworkGraph{
 }
 
 const ng = new NetworkGraph();
-ng.updateGraph(graphData);
